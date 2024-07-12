@@ -17,14 +17,9 @@ onBeforeMount(async () => {
   <section v-if="pendingRaffles.length" class="grid gap-4">
     <h2 class="text-xl font-bold">Ongoing Raffle</h2>
     <ul class="cards__container">
-      <RaffleCard
-        v-for="raffle in pendingRaffles"
-        :key="raffle.id"
-        :created-by="raffle.createdBy"
-        :description="raffle.description"
-        :raffle-date="raffle.raffleDate"
-        :title="raffle.name"
-      />
+      <li v-for="raffle in pendingRaffles" :key="raffle.id">
+        <RaffleCard :raffle="raffle" />
+      </li>
     </ul>
   </section>
 </template>
