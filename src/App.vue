@@ -1,20 +1,14 @@
-<script setup lang="ts">
-import { RouterView } from 'vue-router'
-import HeaderComponent from '@/components/HeaderComponent.vue'
+<script lang="ts" setup>
+import { RouterView } from 'vue-router';
+import HeaderComponent from '@/components/HeaderComponent.vue';
 </script>
 
 <template>
-
   <HeaderComponent />
 
-  <main class="w-full mt-24 p-4">
+  <main class="w-full mt-24 px-4 py-8">
     <RouterView />
   </main>
-
 </template>
 
-<style scoped>
-main {
-  height: calc(100vh - 6rem);
-}
-</style>
+<style scoped></style>
