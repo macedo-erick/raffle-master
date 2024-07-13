@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { formatDistanceToNow } from 'date-fns';
+import type { Raffle } from '@/models/raffle.model';
 
-const props = defineProps({
-  raffle: {
-    type: Object,
-    required: true
-  }
-});
+interface RaffleCardProps {
+  raffle: Raffle;
+}
+
+const props = defineProps<RaffleCardProps>();
 
 const truncatedDescription = computed(() => {
   const description = String(props.raffle.description);
@@ -25,7 +25,8 @@ const formattedRaffleDate = computed(() => {
   });
 });
 
-const createdBy = computed(() => props.raffle.createdBy?.slice(0, 1));
+const createdBy = computed(() => props.raffle.createdBy);
+const avatarLabel = computed(() => createdBy.value.firstName.slice(0, 1));
 </script>
 
 <template>
@@ -49,10 +50,10 @@ const createdBy = computed(() => props.raffle.createdBy?.slice(0, 1));
             {{ formattedRaffleDate }}
           </span>
 
-          <RouterLink :to="`/user/${createdBy}`">
+          <RouterLink :to="`/user/${createdBy.id}`">
             <Avatar
-              v-tooltip="{ value: props.raffle.createdBy }"
-              :label="createdBy"
+              v-tooltip="{ value: createdBy.firstName }"
+              :label="avatarLabel"
               shape="circle"
             />
           </RouterLink>

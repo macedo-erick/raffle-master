@@ -1,4 +1,5 @@
 import type { RaffleStatus } from '@/models/raffle-status.enum';
+import type { User } from '@/models/user.model';
 
 export interface Raffle {
   id: string;
@@ -8,7 +9,7 @@ export interface Raffle {
   maxEntries: number;
   status: RaffleStatus;
   winner: string;
-  createdDate: Date;
-  updatedDate: Date;
-  createdBy: string;
+  createdDate: string;
+  updatedDate: string;
+  createdBy: User;
 }
