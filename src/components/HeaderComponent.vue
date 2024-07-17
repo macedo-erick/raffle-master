@@ -28,6 +28,7 @@ const toggleMenu = (event: Event) => {
     <Button
       v-if="!isUserAuthenticated"
       icon="pi pi-lock"
+      rounded
       severity="secondary"
       @click="dialogVisible = true"
     />
