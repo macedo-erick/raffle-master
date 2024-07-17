@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import RaffleCard from '@/components/RaffleCard.vue';
 import type { Raffle } from '@/models/raffle.model';
 import { onMounted, type Ref, ref } from 'vue';
 import RaffleService from '@/shared/services/raffle.service';
+import RaffleCard from '@/components/RaffleCardComponent.vue';
 
-let finishedRaffles: Ref<Raffle[]> = ref([]);
+const finishedRaffles: Ref<Raffle[]> = ref([]);
 
 onMounted(async () => {
   const { data } = await RaffleService.getFinishedRaffles();

@@ -3,10 +3,10 @@ import { onBeforeMount, type Ref, ref } from 'vue';
 
 import type { Raffle } from '@/models/raffle.model';
 
-import RaffleCard from '@/components/RaffleCard.vue';
+import RaffleCard from '@/components/RaffleCardComponent.vue';
 import RaffleService from '@/shared/services/raffle.service';
 
-let pendingRaffles: Ref<Raffle[]> = ref([]);
+const pendingRaffles: Ref<Raffle[]> = ref([]);
 
 onBeforeMount(async () => {
   const { data } = await RaffleService.getPendingRaffles();

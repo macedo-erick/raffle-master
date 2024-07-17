@@ -3,14 +3,14 @@ import type { Raffle } from '@/models/raffle.model';
 import type { AxiosResponse } from 'axios';
 
 const RaffleService = () => {
-  const baseService = BaseService;
+  const baseService = BaseService('raffles');
 
   const getPendingRaffles = (): Promise<AxiosResponse<Raffle[]>> => {
-    return baseService.get('/raffles/pending');
+    return baseService.get('/pending');
   };
 
   const getFinishedRaffles = (): Promise<AxiosResponse<Raffle[]>> => {
-    return baseService.get('/raffles/finished');
+    return baseService.get('/finished');
   };
 
   return {

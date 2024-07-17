@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import OngoingRaffle from '@/components/OngoingRaffle.vue';
-import FinishedRaffle from '@/components/FinishedRaffle.vue';
+import OngoingRaffle from '@/components/OngoingRaffleComponent.vue';
+import FinishedRaffle from '@/components/FinishedRaffleComponent.vue';
 </script>
 
 <template>
