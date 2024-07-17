@@ -46,7 +46,7 @@ const signIn = async () => {
     modal
     position="topright"
   >
-    <form class="flex flex-col py-8 px-4 gap-8">
+    <form class="flex flex-col py-8 px-4 gap-8" @keyup.enter="signIn">
       <FloatLabel>
         <InputText id="email" v-model="signInRequest.email" class="w-full" />
         <label for="email">Email</label>
