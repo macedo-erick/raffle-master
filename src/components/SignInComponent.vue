@@ -6,10 +6,10 @@ import { type Ref, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { AuthStore } from '@/shared/services/auth.service';
 
-const authStore = AuthStore();
-
-const toastService = useToast();
 const visible = defineModel('visible', { default: false });
+
+const authStore = AuthStore();
+const toastService = useToast();
 
 const signInRequest: Ref<SignInRequest> = ref({
   email: '',
@@ -49,7 +49,7 @@ const signIn = async () => {
     <form class="flex flex-col py-8 px-4 gap-8" @keyup.enter="signIn">
       <FloatLabel>
         <InputText id="email" v-model="signInRequest.email" class="w-full" />
-        <label for="email">Email</label>
+        <label for="email">{{ $t('messages.emailLabel') }}</label>
       </FloatLabel>
 
       <FloatLabel>
@@ -59,15 +59,17 @@ const signIn = async () => {
           class="w-full"
           toggleMask
         />
-        <label for="password">Password</label>
+        <label for="password">{{ $t('messages.passwordLabel') }}</label>
       </FloatLabel>
 
       <div class="actions__container flex justify-center">
-        <Button label="Sign in" severity="contrast" @click="signIn" />
+        <Button
+          :label="$t('messages.signInButton')"
+          severity="contrast"
+          @click="signIn"
+        />
       </div>
     </form>
   </Dialog>
-
-  <Toast />
 </template>
 <style scoped></style>

@@ -8,7 +8,6 @@ import { formatDistanceToNow } from 'date-fns';
 import type { Raffle } from '@/models/raffle.model';
 
 const props = defineProps<RaffleCardProps>();
-
 const createdBy = computed(() => props.raffle.createdBy);
 const userAvatarLabel = computed(() => createdBy.value.firstName.slice(0, 1));
 

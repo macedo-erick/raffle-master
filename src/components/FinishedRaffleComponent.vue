@@ -2,7 +2,7 @@
 import type { Raffle } from '@/models/raffle.model';
 import { onMounted, type Ref, ref } from 'vue';
 import RaffleService from '@/shared/services/raffle.service';
-import RaffleCard from '@/components/RaffleCardComponent.vue';
+import RaffleCardComponent from '@/components/RaffleCardComponent.vue';
 
 const finishedRaffles: Ref<Raffle[]> = ref([]);
 
@@ -14,10 +14,10 @@ onMounted(async () => {
 
 <template>
   <section v-if="finishedRaffles.length" class="grid gap-4">
-    <h2 class="text-xl font-bold">Finished Raffle</h2>
+    <h2 class="text-xl font-bold">{{ $t('messages.finishedRaffles') }}</h2>
     <ul class="cards__container">
       <li v-for="raffle in finishedRaffles" :key="raffle.id">
-        <RaffleCard :raffle="raffle" />
+        <RaffleCardComponent :raffle="raffle" />
       </li>
     </ul>
   </section>

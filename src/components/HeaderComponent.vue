@@ -1,28 +1,19 @@
 <script lang="ts" setup>
-import { AuthStore } from '@/shared/services/auth.service';
-import { type Ref, ref } from 'vue';
-import type { MenuItem } from 'primevue/menuitem';
-import SignInComponent from '@/components/SignInComponent.vue';
+import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
-
-const authState = AuthStore();
-const { isUserAuthenticated, userAvatarLabel } = storeToRefs(authState);
+import { AuthStore } from '@/shared/services/auth.service';
+import SignInComponent from '@/components/SignInComponent.vue';
+import MenuComponent from '@/components/MenuComponent.vue';
 
 const dialogVisible = ref(false);
-
 const menu = ref();
 
-const menuItems: Ref<MenuItem[]> = ref([
-  {
-    label: 'Profile',
-    items: [
-      { label: 'Logout', icon: 'pi pi-sign-out', command: authState.signOut }
-    ]
-  }
-]);
+const authState = AuthStore();
+
+const { isUserAuthenticated, userAvatarLabel } = storeToRefs(authState);
 
 const toggleMenu = (event: Event) => {
-  menu.value.toggle(event);
+  menu.value.toggleMenu(event);
 };
 </script>
 
@@ -31,7 +22,7 @@ const toggleMenu = (event: Event) => {
     class="bg-white fixed w-full top-0 h-24 flex items-center justify-between p-4 shadow-md"
   >
     <RouterLink to="/">
-      <h1 class="text-3xl font-bold">Raffle Master</h1>
+      <h1 class="text-3xl font-bold">{{ $t('messages.appTitle') }}</h1>
     </RouterLink>
 
     <Button
@@ -49,7 +40,7 @@ const toggleMenu = (event: Event) => {
       @click="toggleMenu"
     />
 
-    <Menu ref="menu" :model="menuItems" :popup="true" />
+    <MenuComponent ref="menu" />
 
     <SignInComponent v-model:visible="dialogVisible" />
   </header>

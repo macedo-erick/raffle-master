@@ -4,6 +4,8 @@ import HeaderComponent from '@/components/HeaderComponent.vue';
 </script>
 
 <template>
+  <Toast />
+
   <HeaderComponent />
 
   <main class="w-full mt-24 px-4 py-8">
