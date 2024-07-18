@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Raffle } from '@/models/raffle.model';
 import { onMounted, type Ref, ref } from 'vue';
-import RaffleService from '@/shared/services/raffle.service';
+import RaffleService from '@/services/raffle.service';
 import RaffleCardComponent from '@/components/RaffleCardComponent.vue';
 
 const finishedRaffles: Ref<Raffle[]> = ref([]);

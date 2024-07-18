@@ -1,23 +1,8 @@
 /* eslint-disable no-useless-catch */
-import { type AxiosResponse } from 'axios';
-import type { SignInRequest, SignInResponse } from '@/models/sign-in.model';
-import BaseService from '@/shared/services/base.service';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-
-export const AuthService = () => {
-  const baseService = BaseService('auth');
-
-  const signIn = (
-    signInRequest: SignInRequest
-  ): Promise<AxiosResponse<SignInResponse>> => {
-    return baseService.post('/sign-in', signInRequest);
-  };
-
-  return {
-    signIn
-  };
-};
+import type { SignInRequest } from '@/models/sign-in.model';
+import { AuthService } from '@/services/auth.service';
 
 export const AuthStore = defineStore('auth', () => {
   const authService = AuthService();

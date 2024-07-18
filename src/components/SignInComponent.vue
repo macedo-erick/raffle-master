@@ -4,13 +4,12 @@ import type { AxiosError } from 'axios';
 import type { ErrorResponse } from '@/models/error.model';
 import { type Ref, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { AuthStore } from '@/shared/services/auth.service';
-
-const visible = defineModel('visible', { default: false });
+import { AuthStore } from '@/store/auth.store';
 
 const authStore = AuthStore();
 const toastService = useToast();
 
+const visible = defineModel('visible', { default: false });
 const signInRequest: Ref<SignInRequest> = ref({
   email: '',
   password: ''

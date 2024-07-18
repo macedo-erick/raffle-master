@@ -1,4 +1,4 @@
-import BaseService from '@/shared/services/base.service';
+import BaseService from '@/services/base.service';
 import type { Raffle } from '@/models/raffle.model';
 import type { AxiosResponse } from 'axios';
 
@@ -13,9 +13,14 @@ const RaffleService = () => {
     return baseService.get('/finished');
   };
 
+  const getRaffle = (raffleId: string): Promise<AxiosResponse<Raffle>> => {
+    return baseService.get(`/${raffleId}`);
+  };
+
   return {
     getPendingRaffles,
-    getFinishedRaffles
+    getFinishedRaffles,
+    getRaffle
   };
 };
 

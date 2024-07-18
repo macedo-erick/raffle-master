@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 import { ref, type Ref } from 'vue';
 import type { MenuItem } from 'primevue/menuitem';
-import { AuthStore } from '@/shared/services/auth.service';
+import { AuthStore } from '@/store/auth.store';
 
 const { signOut } = AuthStore();
 
 const menu = ref();
-
 const menuItems: Ref<MenuItem[]> = ref([
   {
     label: 'menuProfileLabel',

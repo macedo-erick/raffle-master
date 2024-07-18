@@ -1,16 +1,15 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { AuthStore } from '@/shared/services/auth.service';
+import { AuthStore } from '@/store/auth.store';
 import SignInComponent from '@/components/SignInComponent.vue';
 import MenuComponent from '@/components/MenuComponent.vue';
-
-const dialogVisible = ref(false);
-const menu = ref();
 
 const authState = AuthStore();
 
 const { isUserAuthenticated, userAvatarLabel } = storeToRefs(authState);
+const dialogVisible = ref(false);
+const menu = ref();
 
 const toggleMenu = (event: Event) => {
   menu.value.toggleMenu(event);

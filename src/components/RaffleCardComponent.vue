@@ -1,17 +1,18 @@
 <script lang="ts" setup>
-interface RaffleCardProps {
-  raffle: Raffle;
-}
-
+import { LocaleStore } from '@/store/locale.store';
 import { computed } from 'vue';
 import { formatDistanceToNow } from 'date-fns';
+import { storeToRefs } from 'pinia';
 import type { Raffle } from '@/models/raffle.model';
 
-const props = defineProps<RaffleCardProps>();
+const localeStore = LocaleStore();
+
+const { currentLocale } = storeToRefs(localeStore);
+const props = defineProps<{ raffle: Raffle }>();
 const createdBy = computed(() => props.raffle.createdBy);
 const userAvatarLabel = computed(() => createdBy.value.firstName.slice(0, 1));
 
-const truncatedDescription = computed(() => {
+const truncatedRaffleDescription = computed(() => {
   const description = String(props.raffle.description);
 
   return description.length >= 400
@@ -19,11 +20,12 @@ const truncatedDescription = computed(() => {
     : description;
 });
 
-const formattedRaffleDate = computed(() => {
+const parsedRaffleEventDate = computed(() => {
   const raffleDate = new Date(props.raffle.raffleDate);
 
   return formatDistanceToNow(raffleDate, {
-    addSuffix: true
+    addSuffix: true,
+    locale: currentLocale.value.fns
   });
 });
 </script>
@@ -39,14 +41,14 @@ const formattedRaffleDate = computed(() => {
 
       <template #content>
         <h3 class="text-sm text-gray-600">
-          {{ truncatedDescription }}
+          {{ truncatedRaffleDescription }}
         </h3>
       </template>
 
       <template #footer>
         <div class="flex justify-between items-center">
           <span class="text-xs text-gray-400">
-            {{ formattedRaffleDate }}
+            {{ parsedRaffleEventDate }}
           </span>
 
           <RouterLink :to="`/user/${createdBy.id}`">

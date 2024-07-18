@@ -2,7 +2,7 @@
 import { onBeforeMount, type Ref, ref } from 'vue';
 import type { Raffle } from '@/models/raffle.model';
 import RaffleCardComponent from '@/components/RaffleCardComponent.vue';
-import RaffleService from '@/shared/services/raffle.service';
+import RaffleService from '@/services/raffle.service';
 
 const pendingRaffles: Ref<Raffle[]> = ref([]);
 
