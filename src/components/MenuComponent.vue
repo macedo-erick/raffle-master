@@ -2,16 +2,18 @@
 import { ref, type Ref } from 'vue';
 import type { MenuItem } from 'primevue/menuitem';
 import { AuthStore } from '@/store/auth.store';
+import { useI18n } from 'vue-i18n';
 
 const { signOut } = AuthStore();
 
+const { t } = useI18n();
 const menu = ref();
 const menuItems: Ref<MenuItem[]> = ref([
   {
-    label: 'menuProfileLabel',
+    label: t('messages.menuProfileLabel'),
     items: [
       {
-        label: 'menuLogoutLabel',
+        label: t('messages.menuLogoutLabel'),
         icon: 'pi pi-sign-out',
         command: signOut
       }
@@ -27,18 +29,7 @@ defineExpose({ toggleMenu });
 </script>
 
 <template>
-  <Menu ref="menu" :model="menuItems" :popup="true">
-    <template #submenulabel="{ item }">
-      <span>{{ $t(`messages.${item.label}`) }}</span>
-    </template>
-
-    <template #item="{ item, props }">
-      <a v-ripple class="flex items-center" v-bind="props.action">
-        <span :class="item.icon" />
-        <span>{{ $t(`messages.${item.label}`) }}</span>
-      </a>
-    </template>
-  </Menu>
+  <Menu ref="menu" :model="menuItems" :popup="true" />
 </template>
 
 <style scoped></style>
