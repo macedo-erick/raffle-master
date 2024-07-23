@@ -22,6 +22,9 @@ import FloatLabel from 'primevue/floatlabel';
 import ToastService from 'primevue/toastservice';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
+import Chip from 'primevue/chip';
+import InputNumber from 'primevue/inputnumber';
+import ProgressBar from 'primevue/progressbar';
 
 const app = createApp(App);
 
@@ -45,7 +48,10 @@ const i18n = createI18n({
         forgotPassword: 'Forgot Password?',
         menuProfileLabel: 'Profile',
         menuLogoutLabel: 'Logout',
-        createdDate: 'Created'
+        createdDate: 'Created',
+        raffleDate: 'Raffle date',
+        raffleEntries: 'My entries',
+        buyRaffleEntries: 'Buy Raffle Entries'
       }
     },
     'pt-BR': {
@@ -62,7 +68,10 @@ const i18n = createI18n({
         forgotPassword: 'Esqueceu sua senha?',
         menuProfileLabel: 'Perfil',
         menuLogoutLabel: 'Sair',
-        createdDate: 'Criado'
+        createdDate: 'Criado',
+        raffleDate: 'Data so sorteio',
+        raffleEntries: 'Meus números',
+        buyRaffleEntries: 'Comprar números'
       }
     }
   }
@@ -87,5 +96,8 @@ app
   .component('FloatLabel', FloatLabel)
   .component('InputText', InputText)
   .component('Password', Password)
+  .component('Chip', Chip)
+  .component('ProgressBar', ProgressBar)
+  .component('InputNumber', InputNumber)
   .directive('tooltip', Tooltip)
   .mount('#app');

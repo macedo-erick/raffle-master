@@ -6,6 +6,7 @@ export interface Raffle {
   name: string;
   description: string;
   prizeValue: number;
+  entryValue: number;
   raffleDate: string;
   maxEntries: number;
   status: RaffleStatus;
