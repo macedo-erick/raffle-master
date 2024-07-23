@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router';
-import { computed, onMounted, type Ref, ref } from 'vue';
+import { computed, onMounted, type Ref, ref, watchEffect } from 'vue';
 import type { Raffle } from '@/models/raffle.model';
 import { formatDistanceToNow } from 'date-fns';
 import { useLocaleStore } from '@/store/useLocaleStore';
@@ -121,10 +121,6 @@ const parsedRafflePrizeValue = computed(() => {
   return '';
 });
 
-onMounted(async () => {
-  await Promise.all([getRaffle(), getEntries()]);
-});
-
 const getRaffle = async () => {
   const { data } = await raffleService.getRaffle(String(raffleId.value));
   raffle.value = data;
@@ -157,6 +153,16 @@ const buyEntries = async () => {
 
   buyButtonDisabled.value = false;
 };
+
+onMounted(async () => {
+  await getRaffle();
+});
+
+watchEffect(() => {
+  if (isUserAuthenticated.value) {
+    getEntries();
+  }
+});
 </script>
 
 <template>

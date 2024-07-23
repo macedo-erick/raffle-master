@@ -14,7 +14,7 @@ export const useAuthService = defineStore('auth', () => {
 
   const signIn = async (signInRequest: SignInRequest) => {
     try {
-      const { data } = await instance.post('/auth/signin/', signInRequest);
+      const { data } = await instance.post('/auth/sign-in', signInRequest);
 
       localStorage.setItem('SESSION_ID', data.accessToken);
       localStorage.setItem('FIRSTNAME', data.firstName);
