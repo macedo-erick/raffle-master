@@ -16,7 +16,7 @@ onMounted(async () => {
 
 <template>
   <section v-if="finishedRaffles.length" class="grid gap-4">
-    <h2 class="text-xl font-bold">{{ $t('messages.finishedRaffles') }}</h2>
+    <h2 class="font-bold text-xl">{{ $t('messages.finishedRaffles') }}</h2>
     <ul class="cards__container">
       <li v-for="raffle in finishedRaffles" :key="raffle.id">
         <RaffleCardComponent :raffle="raffle" />

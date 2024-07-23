@@ -25,6 +25,7 @@ import Password from 'primevue/password';
 import Chip from 'primevue/chip';
 import InputNumber from 'primevue/inputnumber';
 import ProgressBar from 'primevue/progressbar';
+import Galleria from 'primevue/galleria';
 
 const app = createApp(App);
 
@@ -99,5 +100,6 @@ app
   .component('Chip', Chip)
   .component('ProgressBar', ProgressBar)
   .component('InputNumber', InputNumber)
+  .component('Galleria', Galleria)
   .directive('tooltip', Tooltip)
   .mount('#app');

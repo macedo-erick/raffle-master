@@ -79,12 +79,33 @@ const truncatedRaffleEntries = computed(() => {
   return entries.value.numbers.slice(0, page.value * 50);
 });
 
-const imageUrl = ref(
-  'https://imgv3.fotor.com/images/side/astronaut-in-space-looking-up-at-the-stars-generated-by-Fotor-AI.jpg'
-);
-
 const parsedRafflePrizeImage = computed(() => {
-  return Array.from({ length: 10 }).map(() => ({ href: imageUrl }));
+  return [
+    {
+      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria1.jpg',
+      alt: 'Description for Image 1'
+    },
+    {
+      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria2.jpg',
+      alt: 'Description for Image 2'
+    },
+    {
+      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria3.jpg',
+      alt: 'Description for Image 3'
+    },
+    {
+      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria4.jpg',
+      alt: 'Description for Image 4'
+    },
+    {
+      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria5.jpg',
+      alt: 'Description for Image 5'
+    },
+    {
+      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria6.jpg',
+      alt: 'Description for Image 6'
+    }
+  ];
 });
 
 const parsedRafflePrizeValue = computed(() => {
@@ -139,22 +160,32 @@ const buyEntries = async () => {
 </script>
 
 <template>
-  <div v-if="raffle" class="grid gap-8">
-    <h2 class="text-2xl text-center font-bold">{{ raffle.name }}</h2>
+  <div v-if="raffle" class="grid gap-10">
+    <h2 class="font-bold text-2xl text-center">{{ raffle.name }}</h2>
 
-    <div class="image__container grid justify-center content-center gap-4">
-      <!--      TODO change images to prime galleria -->
+    <div class="grid justify-center content-center gap-4">
+      <!-- TODO: Add photos of prize -->
 
-      <img
-        v-for="(image, index) of parsedRafflePrizeImage"
-        :key="index"
-        :src="image.href.value"
-        alt="None"
-        class="rounded"
-      />
+      <Galleria
+        :autoPlay="true"
+        :circular="true"
+        :showItemNavigators="true"
+        :showThumbnails="false"
+        :transitionInterval="2000"
+        :value="parsedRafflePrizeImage"
+        containerStyle="max-width: 640px"
+      >
+        <template #item="slotProps">
+          <img
+            :alt="slotProps.item.alt"
+            :src="slotProps.item.url"
+            class="z-10"
+          />
+        </template>
+      </Galleria>
     </div>
 
-    <p class="text-center font-bold text-green-500">
+    <p class="font-bold text-center text-green-500">
       {{ parsedRafflePrizeValue }}
     </p>
 
@@ -164,36 +195,38 @@ const buyEntries = async () => {
 
     <p class="text-center">{{ raffle.description }}</p>
 
-    <div v-if="isUserAuthenticated" class="grid gap-4">
-      <h2 class="text-center text-2xl font-bold">
-        {{ $t('messages.raffleEntries') }} ({{ entries.count }})
-      </h2>
+    <template v-if="isUserAuthenticated">
+      <div class="grid gap-6">
+        <h2 class="font-bold text-center text-2xl">
+          {{ $t('messages.raffleEntries') }} ({{ entries.count }})
+        </h2>
 
-      <div
-        v-if="entries.numbers.length"
-        class="entries__container grid justify-center content-center gap-1"
-      >
-        <Chip
-          v-for="number in truncatedRaffleEntries"
-          :key="number"
-          :label="String(number)"
-          class="d-flex"
-        />
+        <div
+          v-if="entries.numbers.length"
+          class="entries__container grid justify-center content-center gap-1"
+        >
+          <Chip
+            v-for="number in truncatedRaffleEntries"
+            :key="number"
+            :label="String(number)"
+            class="d-flex"
+          />
 
-        <Button
-          v-if="truncatedRaffleEntries.length != entries.numbers.length"
-          label="More"
-          severity="secondary"
-          @click="page++"
-        />
+          <Button
+            v-if="truncatedRaffleEntries.length != entries.numbers.length"
+            label="More"
+            severity="secondary"
+            @click="page++"
+          />
+        </div>
       </div>
 
-      <div class="grid gap-4">
-        <h2 class="text-center text-2xl font-bold">
+      <div class="grid gap-6">
+        <h2 class="font-bold text-center text-2xl">
           {{ $t('messages.buyRaffleEntries') }}
         </h2>
 
-        <div class="flex flex-wrap items-center justify-center gap-4 w-auto">
+        <div class="w-auto flex flex-wrap items-center justify-center gap-3">
           <Button
             v-for="button in buyRaffleEntriesButtons"
             :key="button"
@@ -211,7 +244,7 @@ const buyEntries = async () => {
             showButtons
           />
 
-          <span class="text-center font-bold text-green-500 w-14">{{
+          <span class="w-14 font-bold text-center text-green-500">{{
             parsedTotalEntriesValue
           }}</span>
         </div>
@@ -223,21 +256,15 @@ const buyEntries = async () => {
           @click="buyEntries"
         />
       </div>
-    </div>
+    </template>
 
     <p class="text-sm text-center text-gray-400">
       {{ $t('messages.createdDate') }} {{ parsedRaffleCreationDate }}
     </p>
   </div>
-
-  <!--  TODO: Add photos of prize -->
 </template>
 
 <style scoped>
-.image__container {
-  grid-template-columns: repeat(auto-fit, 20rem);
-}
-
 Button {
   border-radius: 16px !important;
 }

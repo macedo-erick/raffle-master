@@ -16,7 +16,7 @@ const toggleMenu = (event: Event) => {
 
 <template>
   <header
-    class="bg-white fixed w-full top-0 h-24 flex items-center justify-between p-4 shadow-md"
+    class="bg-white fixed w-full top-0 h-24 flex items-center justify-between p-4 shadow-md z-20"
   >
     <RouterLink to="/">
       <h1 class="text-3xl font-bold">{{ $t('messages.appTitle') }}</h1>

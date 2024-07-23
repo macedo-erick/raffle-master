@@ -55,3 +55,8 @@
   width: 100vw;
   top: 6rem;
 }
+
+.p-galleria-prev-button,
+.p-galleria-next-button {
+  z-index: 20;
+}
