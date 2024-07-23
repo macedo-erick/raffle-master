@@ -51,12 +51,19 @@
 
 .p-progressbar {
   position: fixed !important;
+  top: 6rem;
+
   height: .4rem !important;
   width: 100vw;
-  top: 6rem;
 }
 
 .p-galleria-prev-button,
 .p-galleria-next-button {
   z-index: 20;
+}
+
+.p-inputnumber-input {
+  width: 3.5rem;
+
+  text-align: center;
 }

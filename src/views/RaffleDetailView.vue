@@ -226,7 +226,7 @@ const buyEntries = async () => {
           {{ $t('messages.buyRaffleEntries') }}
         </h2>
 
-        <div class="w-auto flex flex-wrap items-center justify-center gap-3">
+        <div class="flex flex-wrap items-center justify-center gap-2">
           <Button
             v-for="button in buyRaffleEntriesButtons"
             :key="button"
@@ -234,13 +234,14 @@ const buyEntries = async () => {
             class="h-10 grow-0 shrink-0 basis-14"
             @click="incrementEntriesCount(button)"
           />
+        </div>
 
+        <div class="flex items-center justify-center gap-2">
           <InputNumber
             v-model="entriesCount"
             :max="500"
             :min="1"
-            buttonLayout="vertical"
-            class="w-14"
+            buttonLayout="horizontal"
             showButtons
           />
 
