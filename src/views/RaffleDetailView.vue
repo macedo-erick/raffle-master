@@ -2,20 +2,23 @@
 import { useRoute } from 'vue-router';
 import { computed, onMounted, type Ref, ref } from 'vue';
 import type { Raffle } from '@/models/raffle.model';
-import RaffleService from '@/services/raffle.service';
 import { formatDistanceToNow } from 'date-fns';
-import { LocaleStore } from '@/store/locale.store';
+import { useLocaleStore } from '@/store/useLocaleStore';
 import { storeToRefs } from 'pinia';
-import { AuthStore } from '@/store/auth.store';
 import type { EntriesResponseDto } from '@/models/entry.model';
-import EntryService from '@/services/entry.service';
+import { useAuthService } from '@/services/auth.service';
+import { useRaffleService } from '@/services/raffle.service';
+import { useEntryService } from '@/services/entry.service';
 
 const route = useRoute();
-const localeStore = LocaleStore();
-const authStore = AuthStore();
+const localeStore = useLocaleStore();
+
+const authService = useAuthService();
+const raffleService = useRaffleService();
+const entryService = useEntryService();
 
 const { currentLocale } = storeToRefs(localeStore);
-const { isUserAuthenticated } = storeToRefs(authStore);
+const { isUserAuthenticated } = storeToRefs(authService);
 
 const raffleId = ref(route.params.raffleId);
 
@@ -25,8 +28,8 @@ const entries: Ref<EntriesResponseDto> = ref({ numbers: [], count: 0 });
 const page: Ref<number> = ref(1);
 
 const buyRaffleEntriesButtons = ref([1, 5, 10, 100, 500]);
-
 const entriesCount = ref(1);
+const buyButtonDisabled = ref(false);
 
 const parsedTotalEntriesValue = computed(() => {
   if (raffle.value) {
@@ -98,17 +101,16 @@ const parsedRafflePrizeValue = computed(() => {
 });
 
 onMounted(async () => {
-  await getRaffle();
-  await getEntries();
+  await Promise.all([getRaffle(), getEntries()]);
 });
 
 const getRaffle = async () => {
-  const { data } = await RaffleService.getRaffle(String(raffleId.value));
+  const { data } = await raffleService.getRaffle(String(raffleId.value));
   raffle.value = data;
 };
 
 const getEntries = async () => {
-  const { data } = await EntryService.getRaffleEntries(String(raffleId.value));
+  const { data } = await entryService.getRaffleEntries(String(raffleId.value));
   entries.value = data;
 };
 
@@ -123,12 +125,16 @@ const incrementEntriesCount = (entries: number) => {
 };
 
 const buyEntries = async () => {
-  await EntryService.createEntries({
+  buyButtonDisabled.value = true;
+
+  await entryService.createEntries({
     quantity: entriesCount.value,
     raffleId: String(raffleId.value)
   });
 
   await getEntries();
+
+  buyButtonDisabled.value = false;
 };
 </script>
 
@@ -211,6 +217,7 @@ const buyEntries = async () => {
         </div>
 
         <Button
+          :disabled="buyButtonDisabled"
           class="w-20 justify-self-center"
           label="Buy"
           @click="buyEntries"
@@ -236,6 +243,6 @@ Button {
 }
 
 .entries__container {
-  grid-template-columns: repeat(auto-fit, 5rem);
+  grid-template-columns: repeat(auto-fit, 6rem);
 }
 </style>

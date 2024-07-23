@@ -1,13 +1,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { AuthStore } from '@/store/auth.store';
 import SignInComponent from '@/components/SignInComponent.vue';
 import MenuComponent from '@/components/MenuComponent.vue';
+import { useAuthService } from '@/services/auth.service';
 
-const authState = AuthStore();
-
-const { isUserAuthenticated, userAvatarLabel } = storeToRefs(authState);
+const { isUserAuthenticated, userAvatarLabel } = storeToRefs(useAuthService());
 const dialogVisible = ref(false);
 const menu = ref();
 

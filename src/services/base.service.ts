@@ -1,11 +1,24 @@
 import axios from 'axios';
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
-const BaseService = (baseUrl: string) => {
-  const instance = axios.create({
-    baseURL: `http://localhost:3000/${baseUrl}`
-  });
+export enum PageState {
+  LOADING = 'LOADING',
+  LOADED = 'LOADED'
+}
 
-  instance.interceptors.request.use((config) => {
+export const useBaseService = defineStore('baseService', () => {
+  const pageState = ref(PageState.LOADED);
+
+  const instance = ref(
+    axios.create({
+      baseURL: `http://localhost:3000`
+    })
+  );
+
+  instance.value.interceptors.request.use((config) => {
+    pageState.value = PageState.LOADING;
+
     const sessionId = localStorage.getItem('SESSION_ID');
 
     if (sessionId) {
@@ -15,7 +28,11 @@ const BaseService = (baseUrl: string) => {
     return config;
   });
 
-  return instance;
-};
+  instance.value.interceptors.response.use((res) => {
+    pageState.value = PageState.LOADED;
 
-export default BaseService;
+    return res;
+  });
+
+  return { pageState, instance };
+});

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { LocaleStore } from '@/store/locale.store';
+import { useLocaleStore } from '@/store/useLocaleStore';
 import { computed } from 'vue';
 import { formatDistanceToNow } from 'date-fns';
 import { storeToRefs } from 'pinia';
 import type { Raffle } from '@/models/raffle.model';
 
-const localeStore = LocaleStore();
+const localeStore = useLocaleStore();
 
 const { currentLocale } = storeToRefs(localeStore);
 const props = defineProps<{ raffle: Raffle }>();

@@ -3,7 +3,7 @@ import { enUS, ptBR } from 'date-fns/locale';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-export const LocaleStore = defineStore('locale', () => {
+export const useLocaleStore = defineStore('locale', () => {
   const { locale } = useI18n();
 
   const localesMap = ref({

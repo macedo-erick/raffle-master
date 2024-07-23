@@ -4,9 +4,9 @@ import type { AxiosError } from 'axios';
 import type { ErrorResponse } from '@/models/error.model';
 import { type Ref, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { AuthStore } from '@/store/auth.store';
+import { useAuthService } from '@/services/auth.service';
 
-const authStore = AuthStore();
+const authService = useAuthService();
 const toastService = useToast();
 
 const visible = defineModel('visible', { default: false });
@@ -17,7 +17,7 @@ const signInRequest: Ref<SignInRequest> = ref({
 
 const signIn = async () => {
   try {
-    await authStore.signIn(signInRequest.value);
+    await authService.signIn(signInRequest.value);
 
     visible.value = false;
 

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref, type Ref } from 'vue';
 import type { MenuItem } from 'primevue/menuitem';
-import { AuthStore } from '@/store/auth.store';
 import { useI18n } from 'vue-i18n';
+import { useAuthService } from '@/services/auth.service';
 
-const { signOut } = AuthStore();
+const { signOut } = useAuthService();
 
 const { t } = useI18n();
 const menu = ref();

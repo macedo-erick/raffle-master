@@ -1,27 +1,26 @@
-import BaseService from '@/services/base.service';
+import { useBaseService } from '@/services/base.service';
 import type { AxiosResponse } from 'axios';
 import type {
   CreateEntriesDto,
   EntriesResponseDto
 } from '@/models/entry.model';
+import { defineStore } from 'pinia';
 
-const RaffleService = () => {
-  const baseService = BaseService('entries');
+export const useEntryService = defineStore('entryService', () => {
+  const { instance } = useBaseService();
 
   const createEntries = (createEntriesDto: CreateEntriesDto) => {
-    return baseService.post('/', createEntriesDto);
+    return instance.post('/entries/', createEntriesDto);
   };
 
   const getRaffleEntries = (
     raffleId: string
   ): Promise<AxiosResponse<EntriesResponseDto>> => {
-    return baseService.get(`/${raffleId}`);
+    return instance.get(`/entries/${raffleId}`);
   };
 
   return {
     getRaffleEntries,
     createEntries
   };
-};
-
-export default RaffleService();
+});
