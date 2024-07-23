@@ -5,33 +5,39 @@ import type { Raffle } from '@/models/raffle.model';
 import { formatDistanceToNow } from 'date-fns';
 import { useLocaleStore } from '@/store/useLocaleStore';
 import { storeToRefs } from 'pinia';
-import type { EntriesResponseDto } from '@/models/entry.model';
 import { useAuthService } from '@/services/auth.service';
 import { useRaffleService } from '@/services/raffle.service';
-import { useEntryService } from '@/services/entry.service';
+import { useToast } from 'primevue/usetoast';
+import { useI18n } from 'vue-i18n';
+import { useTicketService } from '@/services/ticket.service';
+import type { TicketsResponseDto } from '@/models/ticket.model';
+import type { AxiosError } from 'axios';
+import type { ErrorResponse } from '@/models/error.model';
 
 const route = useRoute();
 const localeStore = useLocaleStore();
 
 const authService = useAuthService();
 const raffleService = useRaffleService();
-const entryService = useEntryService();
+const ticketService = useTicketService();
+const toastService = useToast();
 
+const { t } = useI18n();
 const { currentLocale } = storeToRefs(localeStore);
 const { isUserAuthenticated } = storeToRefs(authService);
 
 const raffleId = ref(route.params.raffleId);
 
 const raffle: Ref<Raffle | undefined> = ref();
-const entries: Ref<EntriesResponseDto> = ref({ numbers: [], count: 0 });
+const tickets: Ref<TicketsResponseDto> = ref({ numbers: [], count: 0 });
 
 const page: Ref<number> = ref(1);
 
-const buyRaffleEntriesButtons = ref([1, 5, 10, 100, 500]);
-const entriesCount = ref(1);
+const buyRaffleTicketsButtons = ref([1, 5, 10, 100, 500]);
+const ticketsCount = ref(1);
 const buyButtonDisabled = ref(false);
 
-const parsedTotalEntriesValue = computed(() => {
+const parsedTotalTicketsValue = computed(() => {
   if (raffle.value) {
     const currencyFormatter = new Intl.NumberFormat(currentLocale.value.js, {
       style: 'currency',
@@ -39,7 +45,7 @@ const parsedTotalEntriesValue = computed(() => {
     });
 
     return currencyFormatter.format(
-      entriesCount.value * raffle.value.entryValue
+      ticketsCount.value * raffle.value.ticketPrice
     );
   }
 
@@ -75,37 +81,8 @@ const parsedRaffleEventDate = computed(() => {
   return '';
 });
 
-const truncatedRaffleEntries = computed(() => {
-  return entries.value.numbers.slice(0, page.value * 50);
-});
-
-const parsedRafflePrizeImage = computed(() => {
-  return [
-    {
-      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria1.jpg',
-      alt: 'Description for Image 1'
-    },
-    {
-      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria2.jpg',
-      alt: 'Description for Image 2'
-    },
-    {
-      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria3.jpg',
-      alt: 'Description for Image 3'
-    },
-    {
-      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria4.jpg',
-      alt: 'Description for Image 4'
-    },
-    {
-      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria5.jpg',
-      alt: 'Description for Image 5'
-    },
-    {
-      url: 'https://primefaces.org/cdn/primevue/images/galleria/galleria6.jpg',
-      alt: 'Description for Image 6'
-    }
-  ];
+const truncatedRaffleTickets = computed(() => {
+  return tickets.value.numbers.slice(0, page.value * 50);
 });
 
 const parsedRafflePrizeValue = computed(() => {
@@ -126,32 +103,57 @@ const getRaffle = async () => {
   raffle.value = data;
 };
 
-const getEntries = async () => {
-  const { data } = await entryService.getRaffleEntries(String(raffleId.value));
-  entries.value = data;
+const getTickets = async () => {
+  const { data } = await ticketService.getRaffleTickets(String(raffleId.value));
+  tickets.value = data;
 };
 
-const incrementEntriesCount = (entries: number) => {
+const incrementTicketsCount = (tickets: number) => {
   const MAX_ENTRIES = 500;
 
-  if (entriesCount.value + entries >= MAX_ENTRIES) {
-    entriesCount.value = MAX_ENTRIES;
+  if (ticketsCount.value + tickets > MAX_ENTRIES) {
+    ticketsCount.value = MAX_ENTRIES;
+
+    toastService.add({
+      summary: 'Error',
+      severity: 'error',
+      detail: t('messages.maxTicketsError'),
+      life: 3000
+    });
   } else {
-    return (entriesCount.value += entries);
+    return (ticketsCount.value += tickets);
   }
 };
 
-const buyEntries = async () => {
-  buyButtonDisabled.value = true;
+const buyTickets = async () => {
+  try {
+    buyButtonDisabled.value = true;
 
-  await entryService.createEntries({
-    quantity: entriesCount.value,
-    raffleId: String(raffleId.value)
-  });
+    await ticketService.createTickets({
+      quantity: ticketsCount.value,
+      raffleId: String(raffleId.value)
+    });
 
-  await getEntries();
+    await getTickets();
 
-  buyButtonDisabled.value = false;
+    buyButtonDisabled.value = false;
+
+    toastService.add({
+      summary: 'Success',
+      severity: 'success',
+      detail: t('messages.ticketsPurchasedSuccess'),
+      life: 3000
+    });
+  } catch (err) {
+    const errorData = (err as AxiosError).response?.data as ErrorResponse;
+
+    toastService.add({
+      summary: 'Error',
+      severity: 'error',
+      detail: `${errorData.status} - ${errorData.error}`,
+      life: 3000
+    });
+  }
 };
 
 onMounted(async () => {
@@ -160,7 +162,7 @@ onMounted(async () => {
 
 watchEffect(() => {
   if (isUserAuthenticated.value) {
-    getEntries();
+    getTickets();
   }
 });
 </script>
@@ -170,22 +172,20 @@ watchEffect(() => {
     <h2 class="font-bold text-2xl text-center">{{ raffle.name }}</h2>
 
     <div class="grid justify-center content-center gap-4">
-      <!-- TODO: Add photos of prize -->
-
       <Galleria
         :autoPlay="true"
         :circular="true"
         :showItemNavigators="true"
         :showThumbnails="false"
         :transitionInterval="2000"
-        :value="parsedRafflePrizeImage"
+        :value="raffle.images"
         containerStyle="max-width: 640px"
       >
         <template #item="slotProps">
           <img
-            :alt="slotProps.item.alt"
+            :alt="slotProps.item.alternateText"
             :src="slotProps.item.url"
-            class="z-10"
+            class="z-10 h-[30rem]"
           />
         </template>
       </Galleria>
@@ -202,24 +202,23 @@ watchEffect(() => {
     <p class="text-center">{{ raffle.description }}</p>
 
     <template v-if="isUserAuthenticated">
-      <div class="grid gap-6">
+      <div v-if="tickets.count" class="grid gap-6">
         <h2 class="font-bold text-center text-2xl">
-          {{ $t('messages.raffleEntries') }} ({{ entries.count }})
+          {{ $t('messages.raffleTickets') }} ({{ tickets.count }})
         </h2>
 
         <div
-          v-if="entries.numbers.length"
-          class="entries__container grid justify-center content-center gap-1"
+          class="tickets__container grid justify-center content-center gap-1"
         >
           <Chip
-            v-for="number in truncatedRaffleEntries"
+            v-for="number in truncatedRaffleTickets"
             :key="number"
             :label="String(number)"
             class="d-flex"
           />
 
           <Button
-            v-if="truncatedRaffleEntries.length != entries.numbers.length"
+            v-if="truncatedRaffleTickets.length != tickets.count"
             label="More"
             severity="secondary"
             @click="page++"
@@ -229,22 +228,22 @@ watchEffect(() => {
 
       <div class="grid gap-6">
         <h2 class="font-bold text-center text-2xl">
-          {{ $t('messages.buyRaffleEntries') }}
+          {{ $t('messages.buyRaffleTickets') }}
         </h2>
 
         <div class="flex flex-wrap items-center justify-center gap-2">
           <Button
-            v-for="button in buyRaffleEntriesButtons"
+            v-for="button in buyRaffleTicketsButtons"
             :key="button"
             :label="`+${button}`"
             class="h-10 grow-0 shrink-0 basis-14"
-            @click="incrementEntriesCount(button)"
+            @click="incrementTicketsCount(button)"
           />
         </div>
 
         <div class="flex items-center justify-center gap-2">
           <InputNumber
-            v-model="entriesCount"
+            v-model="ticketsCount"
             :max="500"
             :min="1"
             buttonLayout="horizontal"
@@ -252,7 +251,7 @@ watchEffect(() => {
           />
 
           <span class="w-14 font-bold text-center text-green-500">{{
-            parsedTotalEntriesValue
+            parsedTotalTicketsValue
           }}</span>
         </div>
 
@@ -260,7 +259,7 @@ watchEffect(() => {
           :disabled="buyButtonDisabled"
           class="w-20 justify-self-center"
           label="Buy"
-          @click="buyEntries"
+          @click="buyTickets"
         />
       </div>
     </template>
@@ -276,7 +275,7 @@ Button {
   border-radius: 16px !important;
 }
 
-.entries__container {
+.tickets__container {
   grid-template-columns: repeat(auto-fit, 6rem);
 }
 </style>

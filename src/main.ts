@@ -51,8 +51,10 @@ const i18n = createI18n({
         menuLogoutLabel: 'Logout',
         createdDate: 'Created',
         raffleDate: 'Raffle date',
-        raffleEntries: 'My entries',
-        buyRaffleEntries: 'Buy Raffle Entries'
+        raffleTickets: 'My tickets',
+        buyRaffleTickets: 'Buy tickets',
+        maxTicketsError: 'You can only purchase 500 tickets at a time',
+        ticketsPurchasedSuccess: 'Tickets purchased successfully'
       }
     },
     'pt-BR': {
@@ -71,8 +73,10 @@ const i18n = createI18n({
         menuLogoutLabel: 'Sair',
         createdDate: 'Criado',
         raffleDate: 'Data so sorteio',
-        raffleEntries: 'Meus números',
-        buyRaffleEntries: 'Comprar números'
+        raffleTickets: 'Meus números',
+        buyRaffleTickets: 'Comprar números',
+        maxTicketsError: 'Você só comprar 500 números por vez',
+        ticketsPurchasedSuccess: 'Entradas compradas com sucesso'
       }
     }
   }

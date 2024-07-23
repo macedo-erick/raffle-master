@@ -1,17 +1,19 @@
 import type { RaffleStatus } from '@/models/raffle-status.enum';
 import type { User } from '@/models/user.model';
+import type { RaffleImage } from '@/models/raffle-image.model';
 
 export interface Raffle {
   id: string;
   name: string;
   description: string;
   prizeValue: number;
-  entryValue: number;
+  ticketPrice: number;
   raffleDate: string;
-  maxEntries: number;
+  maxTickets: number;
   status: RaffleStatus;
   winner: string;
   createdDate: string;
   updatedDate: string;
   createdBy: User;
+  images: RaffleImage[];
 }
