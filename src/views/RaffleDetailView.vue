@@ -239,11 +239,11 @@ watch(chargeStatus, (chargeStatus) => {
           {{ $t('messages.raffleTickets') }} ({{ tickets.count }})
         </h2>
 
-        <Card class="w-80 sm:w-[41rem] justify-self-center">
+        <Card class="w-80 sm:w-[40rem] justify-self-center">
           <template #content>
             <ScrollPanel style="max-height: 25rem">
               <div
-                class="tickets__container grid justify-center content-center gap-1"
+                class="tickets__container sm:px-4 grid justify-center content-center gap-1"
               >
                 <Chip
                   v-for="number in tickets.numbers"
