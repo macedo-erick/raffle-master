@@ -59,7 +59,8 @@ const i18n = createI18n({
         buyButtonLabel: 'Buy',
         buyButtonLabelNotAuthenticated:
           'You need to be logged in to buy tickets',
-        ticketsPurchasedSuccess: 'Tickets purchased successfully',
+        ticketsPurchasedSuccess:
+          'Purchase of tickets made successfully. You will receive a notification once your tickets have been generated',
         pixGuide: "Open your bank's app, scan the image or paste the QR Code",
         pixGuideLine2:
           'Do not close this page, your tickets will be generated when payment is detected',
@@ -91,7 +92,8 @@ const i18n = createI18n({
         buyButtonLabel: 'Comprar',
         buyButtonLabelNotAuthenticated:
           'Você precisa estar logado para comprar entradas',
-        ticketsPurchasedSuccess: 'Entradas compradas com sucesso',
+        ticketsPurchasedSuccess:
+          'Compra de entradas realizada com sucesso. Você receberá uma notificação assim que suas entradas forem geradas',
         pixGuide:
           'Abra o app do seu banco, escaneie a imagem ou cole o código QR Code',
         pixGuideLine2:

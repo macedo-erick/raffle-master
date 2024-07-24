@@ -161,13 +161,11 @@ const buyTickets = async () => {
       raffleId: String(raffleId.value)
     });
 
-    await getTickets();
-
     toastService.add({
       summary: 'Success',
       severity: 'success',
       detail: t('messages.ticketsPurchasedSuccess'),
-      life: 3000
+      life: 10000
     });
 
     buyTicketsButtonDisabled.value = false;
@@ -243,7 +241,7 @@ watch(chargeStatus, (chargeStatus) => {
 
         <Card class="w-80 sm:w-[41rem] justify-self-center">
           <template #content>
-            <ScrollPanel style="width: 100%; height: 200px">
+            <ScrollPanel style="max-height: 25rem">
               <div
                 class="tickets__container grid justify-center content-center gap-1"
               >
@@ -284,7 +282,7 @@ watch(chargeStatus, (chargeStatus) => {
           showButtons
         />
 
-        <span class="w-14 font-bold text-center text-green-500">{{
+        <span class="w-14 font-bold text-center text-green-500 select-none">{{
           parsedTotalTicketsValue
         }}</span>
       </div>
