@@ -91,7 +91,7 @@ watch(dialogVisible, (dialogVisible) => {
         v-if="qrCodeImage"
         :src="qrCodeImage"
         alt="QR Code"
-        class="border-2 border-green-500 rounded-lg"
+        class="h-40 border-2 border-green-500 rounded-lg"
       />
 
       <p class="text-center">{{ $t('messages.pixGuide') }}</p>
@@ -107,8 +107,4 @@ watch(dialogVisible, (dialogVisible) => {
   </Dialog>
 </template>
 
-<style scoped>
-img {
-  height: 10rem;
-}
-</style>
+<style scoped></style>

@@ -112,7 +112,13 @@ app
   .use(ToastService)
   .use(PrimeVue, {
     theme: {
-      preset: Aura
+      preset: Aura,
+      options: {
+        cssLayer: {
+          name: 'primevue',
+          order: 'tailwind-base, primevue, tailwind-utilities'
+        }
+      }
     }
   })
   .component('Button', Button)

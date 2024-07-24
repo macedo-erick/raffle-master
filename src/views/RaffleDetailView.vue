@@ -35,8 +35,6 @@ const raffleId = ref(route.params.raffleId);
 const raffle: Ref<Raffle | undefined> = ref();
 const tickets: Ref<TicketsResponseDto> = ref({ numbers: [], count: 0 });
 
-const page: Ref<number> = ref(1);
-
 const buyRaffleTicketsButtons = ref([1, 5, 10, 100, 500]);
 const ticketsCount = ref(1);
 const buyTicketsButtonDisabled = ref(false);
@@ -243,7 +241,7 @@ watch(chargeStatus, (chargeStatus) => {
           {{ $t('messages.raffleTickets') }} ({{ tickets.count }})
         </h2>
 
-        <Card>
+        <Card class="w-80 sm:w-[41rem] justify-self-center">
           <template #content>
             <ScrollPanel style="width: 100%; height: 200px">
               <div
@@ -272,7 +270,7 @@ watch(chargeStatus, (chargeStatus) => {
           v-for="button in buyRaffleTicketsButtons"
           :key="button"
           :label="`+${button}`"
-          class="h-10 grow-0 shrink-0 basis-14"
+          class="h-10 grow-0 shrink-0 basis-14 rounded-2xl"
           @click="incrementTicketsCount(button)"
         />
       </div>
@@ -294,7 +292,7 @@ watch(chargeStatus, (chargeStatus) => {
       <Button
         :disabled="!isUserAuthenticated || buyTicketsButtonDisabled"
         :label="evaluateBuyTicketLabel"
-        class="justify-self-center"
+        class="justify-self-center rounded-2xl"
         @click="createCharge"
       />
     </div>
@@ -312,43 +310,25 @@ watch(chargeStatus, (chargeStatus) => {
 </template>
 
 <style scoped>
-Button {
-  border-radius: 16px !important;
-}
-
 .tickets__container {
   grid-template-columns: repeat(auto-fit, 6rem);
-}
-
-::v-deep(.p-card) {
-  width: 20rem;
-
-  justify-self: center;
 }
 
 ::v-deep(.p-chip-label) {
   width: 100%;
 
   text-align: center;
-  color: #475569;
 
   user-select: none;
 }
 
 ::v-deep(.p-inputnumber-input) {
   width: 3.5rem;
-
   text-align: center;
 }
 
 ::v-deep(.p-galleria-prev-button),
 ::v-deep(.p-galleria-next-button) {
   z-index: 20;
-}
-
-@media (min-width: 640px) {
-  ::v-deep(.p-card) {
-    width: 41rem;
-  }
 }
 </style>
