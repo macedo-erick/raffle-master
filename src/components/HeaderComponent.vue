@@ -40,7 +40,7 @@ const toggleMenu = (event: Event) => {
 
     <MenuComponent ref="menu" />
 
-    <SignInComponent v-model:visible="dialogVisible" />
+    <SignInComponent v-model:dialogVisible="dialogVisible" />
   </header>
 </template>
 
