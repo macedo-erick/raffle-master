@@ -89,10 +89,6 @@ const parsedRaffleEventDate = computed(() => {
   return '';
 });
 
-const truncatedRaffleTickets = computed(() => {
-  return tickets.value.numbers.slice(0, page.value * 50);
-});
-
 const parsedRafflePrizeValue = computed(() => {
   const currencyFormatter = new Intl.NumberFormat(currentLocale.value.js, {
     style: 'currency',
@@ -104,6 +100,14 @@ const parsedRafflePrizeValue = computed(() => {
   }
 
   return '';
+});
+
+const evaluateBuyTicketLabel = computed(() => {
+  if (!isUserAuthenticated.value) {
+    return t('messages.buyButtonLabelNotAuthenticated');
+  }
+
+  return t('messages.buyButtonLabel');
 });
 
 const getRaffle = async () => {
@@ -217,7 +221,7 @@ watch(chargeStatus, (chargeStatus) => {
           <img
             :alt="slotProps.item.alternateText"
             :src="slotProps.item.url"
-            class="z-10 h-[30rem]"
+            class="z-10 h-[20rem] sm:h-[30rem]"
           />
         </template>
       </Galleria>
@@ -239,62 +243,61 @@ watch(chargeStatus, (chargeStatus) => {
           {{ $t('messages.raffleTickets') }} ({{ tickets.count }})
         </h2>
 
-        <div
-          class="tickets__container grid justify-center content-center gap-1"
-        >
-          <Chip
-            v-for="number in truncatedRaffleTickets"
-            :key="number"
-            :label="String(number)"
-            class="d-flex"
-          />
-
-          <Button
-            v-if="truncatedRaffleTickets.length != tickets.count"
-            label="More"
-            severity="secondary"
-            @click="page++"
-          />
-        </div>
-      </div>
-
-      <div class="grid gap-6">
-        <h2 class="font-bold text-center text-2xl">
-          {{ $t('messages.buyRaffleTickets') }}
-        </h2>
-
-        <div class="flex flex-wrap items-center justify-center gap-2">
-          <Button
-            v-for="button in buyRaffleTicketsButtons"
-            :key="button"
-            :label="`+${button}`"
-            class="h-10 grow-0 shrink-0 basis-14"
-            @click="incrementTicketsCount(button)"
-          />
-        </div>
-
-        <div class="flex items-center justify-center gap-2">
-          <InputNumber
-            v-model="ticketsCount"
-            :max="500"
-            :min="1"
-            buttonLayout="horizontal"
-            showButtons
-          />
-
-          <span class="w-14 font-bold text-center text-green-500">{{
-            parsedTotalTicketsValue
-          }}</span>
-        </div>
-
-        <Button
-          :disabled="buyTicketsButtonDisabled"
-          class="w-20 justify-self-center"
-          label="Buy"
-          @click="createCharge"
-        />
+        <Card>
+          <template #content>
+            <ScrollPanel style="width: 100%; height: 200px">
+              <div
+                class="tickets__container grid justify-center content-center gap-1"
+              >
+                <Chip
+                  v-for="number in tickets.numbers"
+                  :key="number"
+                  :label="String(number)"
+                  class="d-flex"
+                />
+              </div>
+            </ScrollPanel>
+          </template>
+        </Card>
       </div>
     </template>
+
+    <div class="grid gap-6">
+      <h2 class="font-bold text-center text-2xl">
+        {{ $t('messages.buyRaffleTickets') }}
+      </h2>
+
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <Button
+          v-for="button in buyRaffleTicketsButtons"
+          :key="button"
+          :label="`+${button}`"
+          class="h-10 grow-0 shrink-0 basis-14"
+          @click="incrementTicketsCount(button)"
+        />
+      </div>
+
+      <div class="flex items-center justify-center gap-2">
+        <InputNumber
+          v-model="ticketsCount"
+          :max="500"
+          :min="1"
+          buttonLayout="horizontal"
+          showButtons
+        />
+
+        <span class="w-14 font-bold text-center text-green-500">{{
+          parsedTotalTicketsValue
+        }}</span>
+      </div>
+
+      <Button
+        :disabled="!isUserAuthenticated || buyTicketsButtonDisabled"
+        :label="evaluateBuyTicketLabel"
+        class="justify-self-center"
+        @click="createCharge"
+      />
+    </div>
 
     <p class="text-sm text-center text-gray-400">
       {{ $t('messages.createdDate') }} {{ parsedRaffleCreationDate }}
@@ -315,5 +318,37 @@ Button {
 
 .tickets__container {
   grid-template-columns: repeat(auto-fit, 6rem);
+}
+
+::v-deep(.p-card) {
+  width: 20rem;
+
+  justify-self: center;
+}
+
+::v-deep(.p-chip-label) {
+  width: 100%;
+
+  text-align: center;
+  color: #475569;
+
+  user-select: none;
+}
+
+::v-deep(.p-inputnumber-input) {
+  width: 3.5rem;
+
+  text-align: center;
+}
+
+::v-deep(.p-galleria-prev-button),
+::v-deep(.p-galleria-next-button) {
+  z-index: 20;
+}
+
+@media (min-width: 640px) {
+  ::v-deep(.p-card) {
+    width: 41rem;
+  }
 }
 </style>
