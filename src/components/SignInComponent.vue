@@ -9,7 +9,7 @@ import { useAuthService } from '@/services/auth.service';
 const authService = useAuthService();
 const toastService = useToast();
 
-const visible = defineModel('visible', { default: false });
+const dialogVisible = defineModel('dialogVisible', { default: false });
 const signInRequest: Ref<SignInRequest> = ref({
   email: '',
   password: ''
@@ -19,7 +19,7 @@ const signIn = async () => {
   try {
     await authService.signIn(signInRequest.value);
 
-    visible.value = false;
+    dialogVisible.value = false;
 
     signInRequest.value = {
       email: '',
@@ -40,7 +40,7 @@ const signIn = async () => {
 
 <template>
   <Dialog
-    v-model:visible="visible"
+    v-model:visible="dialogVisible"
     :dismissableMask="true"
     modal
     position="topright"

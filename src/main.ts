@@ -26,6 +26,7 @@ import Chip from 'primevue/chip';
 import InputNumber from 'primevue/inputnumber';
 import ProgressBar from 'primevue/progressbar';
 import Galleria from 'primevue/galleria';
+import Tag from 'primevue/tag';
 
 const app = createApp(App);
 
@@ -54,7 +55,14 @@ const i18n = createI18n({
         raffleTickets: 'My tickets',
         buyRaffleTickets: 'Buy tickets',
         maxTicketsError: 'You can only purchase 500 tickets at a time',
-        ticketsPurchasedSuccess: 'Tickets purchased successfully'
+        ticketsPurchasedSuccess: 'Tickets purchased successfully',
+        pixGuide: "Open your bank's app, scan the image or paste the QR Code",
+        pixGuideLine2:
+          'Do not close this page, your tickets will be generated when payment is detected',
+        copyQrCode: 'Copy QR Code',
+        copiedToClipboard: 'QR Code copied to clipboard',
+        awaitingPayment: 'Awaiting payment',
+        paymentCompleted: 'Payment completed'
       }
     },
     'pt-BR': {
@@ -76,7 +84,15 @@ const i18n = createI18n({
         raffleTickets: 'Meus números',
         buyRaffleTickets: 'Comprar números',
         maxTicketsError: 'Você só comprar 500 números por vez',
-        ticketsPurchasedSuccess: 'Entradas compradas com sucesso'
+        ticketsPurchasedSuccess: 'Entradas compradas com sucesso',
+        pixGuide:
+          'Abra o app do seu banco, escaneie a imagem ou cole o código QR Code',
+        pixGuideLine2:
+          'Não feche esta página, os lançamentos serão gerados quando o pagamento for detectado',
+        copyQrCode: 'Copiar QR Code',
+        copiedToClipboard: 'QR Code copiado para a área de transferência',
+        awaitingPayment: 'Aguardando pagamento',
+        paymentCompleted: 'Pagamento realizado'
       }
     }
   }
@@ -105,5 +121,6 @@ app
   .component('ProgressBar', ProgressBar)
   .component('InputNumber', InputNumber)
   .component('Galleria', Galleria)
+  .component('Tag', Tag)
   .directive('tooltip', Tooltip)
   .mount('#app');

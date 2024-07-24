@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router';
-import { computed, onMounted, type Ref, ref, watchEffect } from 'vue';
+import { computed, onMounted, type Ref, ref, watch, watchEffect } from 'vue';
 import type { Raffle } from '@/models/raffle.model';
 import { formatDistanceToNow } from 'date-fns';
 import { useLocaleStore } from '@/store/useLocaleStore';
@@ -13,6 +13,9 @@ import { useTicketService } from '@/services/ticket.service';
 import type { TicketsResponseDto } from '@/models/ticket.model';
 import type { AxiosError } from 'axios';
 import type { ErrorResponse } from '@/models/error.model';
+import PaymentComponent from '@/components/PaymentComponent.vue';
+import { usePaymentService } from '@/services/payment.service';
+import { ChargeStatusEnum } from '@/models/charge.model';
 
 const route = useRoute();
 const localeStore = useLocaleStore();
@@ -20,6 +23,7 @@ const localeStore = useLocaleStore();
 const authService = useAuthService();
 const raffleService = useRaffleService();
 const ticketService = useTicketService();
+const paymentService = usePaymentService();
 const toastService = useToast();
 
 const { t } = useI18n();
@@ -35,7 +39,11 @@ const page: Ref<number> = ref(1);
 
 const buyRaffleTicketsButtons = ref([1, 5, 10, 100, 500]);
 const ticketsCount = ref(1);
-const buyButtonDisabled = ref(false);
+const buyTicketsButtonDisabled = ref(false);
+
+const dialogVisible = ref(false);
+const correlationId: Ref<string> = ref('');
+const chargeStatus: Ref<string> = ref('');
 
 const parsedTotalTicketsValue = computed(() => {
   if (raffle.value) {
@@ -125,9 +133,26 @@ const incrementTicketsCount = (tickets: number) => {
   }
 };
 
+const createCharge = async () => {
+  try {
+    if (raffle.value) {
+      const total = ticketsCount.value * raffle.value.ticketPrice;
+
+      const { data } = await paymentService.createCharge(total);
+
+      correlationId.value = data.charge.correlationID;
+      chargeStatus.value = data.charge.status;
+
+      dialogVisible.value = true;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const buyTickets = async () => {
   try {
-    buyButtonDisabled.value = true;
+    buyTicketsButtonDisabled.value = true;
 
     await ticketService.createTickets({
       quantity: ticketsCount.value,
@@ -136,14 +161,15 @@ const buyTickets = async () => {
 
     await getTickets();
 
-    buyButtonDisabled.value = false;
-
     toastService.add({
       summary: 'Success',
       severity: 'success',
       detail: t('messages.ticketsPurchasedSuccess'),
       life: 3000
     });
+
+    buyTicketsButtonDisabled.value = false;
+    dialogVisible.value = false;
   } catch (err) {
     const errorData = (err as AxiosError).response?.data as ErrorResponse;
 
@@ -163,6 +189,12 @@ onMounted(async () => {
 watchEffect(() => {
   if (isUserAuthenticated.value) {
     getTickets();
+  }
+});
+
+watch(chargeStatus, (chargeStatus) => {
+  if (chargeStatus == ChargeStatusEnum.COMPLETED) {
+    buyTickets();
   }
 });
 </script>
@@ -256,10 +288,10 @@ watchEffect(() => {
         </div>
 
         <Button
-          :disabled="buyButtonDisabled"
+          :disabled="buyTicketsButtonDisabled"
           class="w-20 justify-self-center"
           label="Buy"
-          @click="buyTickets"
+          @click="createCharge"
         />
       </div>
     </template>
@@ -268,6 +300,12 @@ watchEffect(() => {
       {{ $t('messages.createdDate') }} {{ parsedRaffleCreationDate }}
     </p>
   </div>
+
+  <PaymentComponent
+    v-model:chargeStatus="chargeStatus"
+    v-model:correlationId="correlationId"
+    v-model:visible="dialogVisible"
+  />
 </template>
 
 <style scoped>
