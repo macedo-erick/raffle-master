@@ -15,15 +15,26 @@ const { pageState } = storeToRefs(useBaseService());
 
   <ProgressBar v-if="pageState == PageState.LOADING" mode="indeterminate" />
 
-  <main class="w-full flex flex-col mt-24 px-4 py-8">
+  <main class="w-full flex flex-col mt-16 px-4 py-8">
     <RouterView />
   </main>
 </template>
 
 <style scoped>
 main {
-  min-height: calc(100vh - 6rem);
+  min-height: calc(100vh - 4rem);
 
   background: #f5f5f5;
+}
+
+::v-deep(.p-avatar),
+::v-deep(.p-button-icon-only) {
+  height: 2rem !important;
+  width: 2rem !important;
+}
+
+::v-deep(.p-avatar-label),
+::v-deep(span.p-button-icon.pi.pi-lock) {
+  font-size: 0.9rem !important;
 }
 </style>
