@@ -20,7 +20,7 @@ export const useTicketService = defineStore('entryService', () => {
   };
 
   return {
-    getRaffleTickets: getRaffleTickets,
-    createTickets: createTickets
+    getRaffleTickets,
+    createTickets
   };
 });

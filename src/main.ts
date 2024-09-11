@@ -55,7 +55,7 @@ const i18n = createI18n({
         raffleDate: 'Raffle date',
         raffleTickets: 'My tickets',
         buyRaffleTickets: 'Buy tickets',
-        maxTicketsError: 'You can only purchase 500 tickets at a time',
+        maxTicketsError: 'You can only purchase 5000 tickets at a time',
         buyButtonLabel: 'Buy',
         buyButtonLabelNotAuthenticated:
           'You need to be logged in to buy tickets',
@@ -88,7 +88,7 @@ const i18n = createI18n({
         raffleDate: 'Data so sorteio',
         raffleTickets: 'Meus números',
         buyRaffleTickets: 'Comprar números',
-        maxTicketsError: 'Você só comprar 500 números por vez',
+        maxTicketsError: 'Você só comprar 5000 números por vez',
         buyButtonLabel: 'Comprar',
         buyButtonLabelNotAuthenticated:
           'Você precisa estar logado para comprar entradas',
@@ -97,7 +97,7 @@ const i18n = createI18n({
         pixGuide:
           'Abra o app do seu banco, escaneie a imagem ou cole o código QR Code',
         pixGuideLine2:
-          'Não feche esta página, os lançamentos serão gerados quando o pagamento for detectado',
+          'Não feche esta página, os números serão gerados quando o pagamento for detectado',
         copyQrCode: 'Copiar QR Code',
         copiedToClipboard: 'QR Code copiado para a área de transferência',
         awaitingPayment: 'Aguardando pagamento',

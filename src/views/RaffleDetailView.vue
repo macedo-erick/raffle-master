@@ -119,7 +119,7 @@ const getTickets = async () => {
 };
 
 const incrementTicketsCount = (tickets: number) => {
-  const MAX_ENTRIES = 500;
+  const MAX_ENTRIES = 5000;
 
   if (ticketsCount.value + tickets > MAX_ENTRIES) {
     ticketsCount.value = MAX_ENTRIES;
@@ -200,101 +200,82 @@ watch(chargeStatus, (chargeStatus) => {
 </script>
 
 <template>
-  <div v-if="raffle" class="grid gap-10">
-    <h2 class="font-bold text-2xl text-center">{{ raffle.name }}</h2>
+  <div v-if="raffle" class="flex justify-center grow">
+    <Card class="h-max">
+      <template #content>
+        <div class="flex justify-center items-center gap-16">
+          <Galleria
+            :autoPlay="true"
+            :circular="true"
+            :showItemNavigators="true"
+            :showThumbnails="false"
+            :transitionInterval="2000"
+            :value="raffle.images"
+            containerStyle="max-width: 640px"
+          >
+            <template #item="slotProps">
+              <img
+                :alt="slotProps.item.alternateText"
+                :src="slotProps.item.url"
+                class="z-10 h-[20rem] sm:h-[30rem]"
+              />
+            </template>
+          </Galleria>
 
-    <div class="grid justify-center content-center gap-4">
-      <Galleria
-        :autoPlay="true"
-        :circular="true"
-        :showItemNavigators="true"
-        :showThumbnails="false"
-        :transitionInterval="2000"
-        :value="raffle.images"
-        containerStyle="max-width: 640px"
-      >
-        <template #item="slotProps">
-          <img
-            :alt="slotProps.item.alternateText"
-            :src="slotProps.item.url"
-            class="z-10 h-[20rem] sm:h-[30rem]"
-          />
-        </template>
-      </Galleria>
-    </div>
+          <div class="flex flex-col gap-4">
+            <h2 class="font-bold text-2xl">{{ raffle.name }}</h2>
 
-    <p class="font-bold text-center text-green-500">
-      {{ parsedRafflePrizeValue }}
-    </p>
+            <h3 class="">{{ raffle.description }}</h3>
 
-    <p class="text-center">
-      {{ $t('messages.raffleDate') }}: {{ parsedRaffleEventDate }}
-    </p>
+            <p class="font-bold text-green-500">
+              {{ parsedRafflePrizeValue }}
+            </p>
 
-    <p class="text-center">{{ raffle.description }}</p>
+            <p class="">
+              {{ parsedRaffleEventDate }}
+            </p>
 
-    <template v-if="isUserAuthenticated">
-      <div v-if="tickets.count" class="grid gap-6">
-        <h2 class="font-bold text-center text-2xl">
-          {{ $t('messages.raffleTickets') }} ({{ tickets.count }})
-        </h2>
+            <div class="grid gap-4">
+              <h2 class="font-bold text-2xl">
+                {{ $t('messages.buyRaffleTickets') }}
+              </h2>
 
-        <Card class="w-80 sm:w-[40rem] justify-self-center">
-          <template #content>
-            <ScrollPanel style="max-height: 25rem">
-              <div
-                class="tickets__container sm:px-4 grid justify-center content-center gap-1"
-              >
-                <Chip
-                  v-for="number in tickets.numbers"
-                  :key="number"
-                  :label="String(number)"
-                  class="d-flex"
+              <div class="buttons__container gap-2">
+                <Button
+                  v-for="button in buyRaffleTicketsButtons"
+                  :key="button"
+                  :label="`+${button}`"
+                  class="h-10 grow-0 shrink-0 basis-14 rounded-2xl"
+                  @click="incrementTicketsCount(button)"
                 />
               </div>
-            </ScrollPanel>
-          </template>
-        </Card>
-      </div>
-    </template>
 
-    <div class="grid gap-6">
-      <h2 class="font-bold text-center text-2xl">
-        {{ $t('messages.buyRaffleTickets') }}
-      </h2>
+              <InputNumber
+                v-model="ticketsCount"
+                :max="5000"
+                :min="1"
+                buttonLayout="horizontal"
+                showButtons
+              />
 
-      <div class="flex flex-wrap items-center justify-center gap-2">
-        <Button
-          v-for="button in buyRaffleTicketsButtons"
-          :key="button"
-          :label="`+${button}`"
-          class="h-10 grow-0 shrink-0 basis-14 rounded-2xl"
-          @click="incrementTicketsCount(button)"
-        />
-      </div>
+              <span class="font-bold text-green-500 select-none text-center">{{
+                parsedTotalTicketsValue
+              }}</span>
 
-      <div class="flex items-center justify-center gap-2">
-        <InputNumber
-          v-model="ticketsCount"
-          :max="500"
-          :min="1"
-          buttonLayout="horizontal"
-          showButtons
-        />
+              <Button
+                :disabled="!isUserAuthenticated || buyTicketsButtonDisabled"
+                :label="evaluateBuyTicketLabel"
+                class="justify-self-center rounded-2xl"
+                @click="createCharge"
+              />
+            </div>
+          </div>
+        </div>
+      </template>
+    </Card>
+  </div>
 
-        <span class="w-14 font-bold text-center text-green-500 select-none">{{
-          parsedTotalTicketsValue
-        }}</span>
-      </div>
-
-      <Button
-        :disabled="!isUserAuthenticated || buyTicketsButtonDisabled"
-        :label="evaluateBuyTicketLabel"
-        class="justify-self-center rounded-2xl"
-        @click="createCharge"
-      />
-    </div>
-
+  <div>
     <p class="text-sm text-center text-gray-400">
       {{ $t('messages.createdDate') }} {{ parsedRaffleCreationDate }}
     </p>
@@ -328,5 +309,10 @@ watch(chargeStatus, (chargeStatus) => {
 ::v-deep(.p-galleria-prev-button),
 ::v-deep(.p-galleria-next-button) {
   z-index: 20;
+}
+
+.buttons__container {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(5rem, 1fr));
 }
 </style>

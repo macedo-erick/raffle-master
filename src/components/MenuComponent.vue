@@ -9,6 +9,9 @@ const { signOut } = useAuthService();
 const { t } = useI18n();
 const menu = ref();
 const menuItems: Ref<MenuItem[]> = ref([
+  /**
+   * TODO: Add Raffle section with items: My Raffles, New Raffle
+   */
   {
     label: t('messages.menuProfileLabel'),
     items: [

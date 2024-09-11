@@ -15,9 +15,15 @@ const { pageState } = storeToRefs(useBaseService());
 
   <ProgressBar v-if="pageState == PageState.LOADING" mode="indeterminate" />
 
-  <main class="w-full mt-24 px-4 py-8">
+  <main class="w-full flex flex-col mt-24 px-4 py-8">
     <RouterView />
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+main {
+  min-height: calc(100vh - 6rem);
+
+  background: #f5f5f5;
+}
+</style>
