@@ -225,15 +225,17 @@ watch(chargeStatus, (chargeStatus) => {
           <div class="flex flex-col gap-4">
             <h2 class="font-bold text-2xl">{{ raffle.name }}</h2>
 
-            <h3 class="">{{ raffle.description }}</h3>
+            <h3>{{ raffle.description }}</h3>
 
             <p class="font-bold text-green-500">
               {{ parsedRafflePrizeValue }}
             </p>
 
-            <p class="">
+            <p>
               {{ parsedRaffleEventDate }}
             </p>
+
+            <!-- TODO: Implement Raffle Percentage           -->
 
             <div class="grid gap-4">
               <h2 class="font-bold text-2xl">
